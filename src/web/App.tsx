@@ -175,7 +175,7 @@ function App() {
 
   return (
     <main className="app-shell">
-      <header className="site-header">
+      <header className="app-header">
         <a className="profile-link" href={GITHUB_URL} target="_blank" rel="noreferrer">
           <img src={GITHUB_AVATAR_URL} alt="starlash7 GitHub profile" />
           <div>
@@ -186,48 +186,40 @@ function App() {
             </span>
           </div>
         </a>
-        <div className="wallet-strip">
-          <span className={address ? "wallet-pill ready" : "wallet-pill"}>
-            {address ? compactAddress(address) : "Wallet disconnected"}
-          </span>
-          {address ? (
+        {address ? (
+          <div className="wallet-strip">
+            <span className="wallet-pill ready">{compactAddress(address)}</span>
             <button className="text-button" type="button" onClick={() => disconnect()}>
               Disconnect
             </button>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </header>
 
-      <section className="page-hero" aria-labelledby="page-title">
-        <div className="hero-copy">
-          <h1 id="page-title">TipJar on Arc</h1>
-        </div>
-        <div className="hero-total" aria-label="Total donations">
+      <section className="top-section" aria-labelledby="page-title">
+        <img className="hero-heart" src={heartAsset} alt="" aria-hidden="true" />
+        <h1 id="page-title">TipJar on Arc</h1>
+        <div className="total-row" aria-label="Total donations">
           <span>Total received</span>
           <strong>{formatUsdc(totalTipped)} USDC</strong>
         </div>
       </section>
 
-      <div className="section-divider" aria-hidden="true" />
+      <form
+        className="send-section"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void handlePrimaryAction();
+        }}
+      >
+        <div className="section-title">
+          <h2>Send USDC</h2>
+        </div>
 
-      <section className="content-grid">
-        <form
-          className="send-panel"
-          onSubmit={(event) => {
-            event.preventDefault();
-            void handlePrimaryAction();
-          }}
-        >
-          <div className="section-heading">
-            <img className="heart-asset" src={heartAsset} alt="" aria-hidden="true" />
-            <div>
-              <h2>Send USDC</h2>
-            </div>
-          </div>
-
-          <label className="field">
+        <div className="field-list">
+          <label className="field-row">
             <span>Amount</span>
-            <div className="amount-field">
+            <div className="amount-control">
               <input
                 inputMode="decimal"
                 value={amountInput}
@@ -239,7 +231,7 @@ function App() {
           </label>
           {amountError ? <p className="field-error">{amountError}</p> : null}
 
-          <label className="field">
+          <label className="field-row message-row">
             <span>Message</span>
             <textarea
               value={message}
@@ -251,82 +243,80 @@ function App() {
           <div className={messageBytes > 280 ? "byte-count over" : "byte-count"}>
             {messageBytes}/280 bytes
           </div>
+        </div>
 
-          <button
-            className="primary-button"
-            type="submit"
-            disabled={!canSubmit || isConnecting || isSwitching}
-          >
-            {isBusy || isConnecting || isSwitching ? (
-              <Loader2 className="spin" aria-hidden="true" />
-            ) : action === "connect" ? (
-              <Wallet aria-hidden="true" />
-            ) : action === "tip" ? (
-              <Send aria-hidden="true" />
-            ) : (
-              <Send aria-hidden="true" />
-            )}
-            {getButtonLabel(action, phase)}
-          </button>
-
-          {showStatus ? (
-            <div className={`status-line ${phase}`}>
-              <span>{status}</span>
-              {lastHash ? (
-                <a href={`${ARC_EXPLORER_URL}/tx/${lastHash}`} target="_blank" rel="noreferrer">
-                  Arcscan <ExternalLink aria-hidden="true" />
-                </a>
-              ) : null}
-            </div>
-          ) : null}
-
-          <a className="faucet-link" href={CIRCLE_FAUCET_URL} target="_blank" rel="noreferrer">
-            Circle Faucet
-            <ExternalLink aria-hidden="true" />
-          </a>
-        </form>
-
-        <section className="history-panel" aria-label="Recent donations">
-          <div className="history-header">
-            <div>
-              <h2>Recent donations</h2>
-            </div>
-            <button
-              className="icon-button"
-              type="button"
-              aria-label="Refresh recent donations"
-              onClick={() => void Promise.all([totalQuery.refetch(), tipsQuery.refetch()])}
-            >
-              <RefreshCcw aria-hidden="true" />
-            </button>
-          </div>
-
-          {visibleTips.length ? (
-            <div className="donation-list">
-              {visibleTips.map((tip, index) => (
-                <article className="donation-item" key={`${tip.sender}-${tip.timestamp}-${index}`}>
-                  <div className="donor-avatar" aria-hidden="true">
-                    {compactAddress(tip.sender).slice(2, 4).toUpperCase()}
-                  </div>
-                  <div className="donation-body">
-                    <div className="donation-row">
-                      <strong>{compactAddress(tip.sender)}</strong>
-                      <span>{formatUsdc(tip.amount)} USDC</span>
-                    </div>
-                    <p>{tip.message || "Sent a tip."}</p>
-                    <time>{formatTimestamp(tip.timestamp)}</time>
-                  </div>
-                </article>
-              ))}
-            </div>
+        <button
+          className="primary-button"
+          type="submit"
+          disabled={!canSubmit || isConnecting || isSwitching}
+        >
+          {isBusy || isConnecting || isSwitching ? (
+            <Loader2 className="spin" aria-hidden="true" />
+          ) : action === "connect" ? (
+            <Wallet aria-hidden="true" />
+          ) : action === "tip" ? (
+            <Send aria-hidden="true" />
           ) : (
-            <div className="empty-state">
-              {tipJarAddress
-                ? "No tips yet. Be the first record in this jar."
-                : "Deploy TipJar and set VITE_TIPJAR_ADDRESS to load tips."}
-            </div>
+            <Send aria-hidden="true" />
           )}
-        </section>
+          {getButtonLabel(action, phase)}
+        </button>
+
+        <a className="faucet-link" href={CIRCLE_FAUCET_URL} target="_blank" rel="noreferrer">
+          Circle Faucet
+          <ExternalLink aria-hidden="true" />
+        </a>
+
+        {showStatus ? (
+          <div className={`status-line ${phase}`}>
+            <span>{status}</span>
+            {lastHash ? (
+              <a href={`${ARC_EXPLORER_URL}/tx/${lastHash}`} target="_blank" rel="noreferrer">
+                Arcscan <ExternalLink aria-hidden="true" />
+              </a>
+            ) : null}
+          </div>
+        ) : null}
+      </form>
+
+      <section className="history-section" aria-label="Recent donations">
+        <div className="list-header">
+          <h2>Recent donations</h2>
+          <button
+            className="icon-button"
+            type="button"
+            aria-label="Refresh recent donations"
+            onClick={() => void Promise.all([totalQuery.refetch(), tipsQuery.refetch()])}
+          >
+            <RefreshCcw aria-hidden="true" />
+          </button>
+        </div>
+
+        {visibleTips.length ? (
+          <div className="donation-list">
+            {visibleTips.map((tip, index) => (
+              <article className="donation-item" key={`${tip.sender}-${tip.timestamp}-${index}`}>
+                <div className="donor-avatar" aria-hidden="true">
+                  {compactAddress(tip.sender).slice(2, 4).toUpperCase()}
+                </div>
+                <div className="donation-body">
+                  <div className="donation-row">
+                    <strong>{compactAddress(tip.sender)}</strong>
+                    <span>{formatUsdc(tip.amount)} USDC</span>
+                  </div>
+                  <p>{tip.message || "Sent a tip."}</p>
+                  <time>{formatTimestamp(tip.timestamp)}</time>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="empty-state">
+            {tipJarAddress
+              ? "No tips yet. Be the first record in this jar."
+              : "Deploy TipJar and set VITE_TIPJAR_ADDRESS to load tips."}
+          </div>
+        )}
       </section>
     </main>
   );
