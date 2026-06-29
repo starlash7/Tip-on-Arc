@@ -117,11 +117,11 @@ in the host before building:
 VITE_TIPJAR_ADDRESS=0xYOUR_DEPLOYED_TIPJAR_ADDRESS
 ```
 
-Demo link placeholder: `https://your-tipjar-demo.example`
+Demo: `https://starlash7.github.io/Tip-on-Arc/`
 
-Screenshot placeholder:
+Screenshot:
 
-![TipJar app screenshot placeholder](docs/screenshot-placeholder.svg)
+![TipJar app screenshot](docs/screenshot.png)
 
 ## Contract API
 
