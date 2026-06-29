@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import {
   useAccount,
-  useChainId,
   useConnect,
   useDisconnect,
   useReadContract,
@@ -32,11 +31,10 @@ const GITHUB_AVATAR_URL = "https://github.com/starlash7.png?size=192";
 const CIRCLE_FAUCET_URL = "https://faucet.circle.com/";
 
 function App() {
-  const { address } = useAccount();
-  const chainId = useChainId();
-  const { connectors, connect, isPending: isConnecting } = useConnect();
+  const { address, chainId: walletChainId } = useAccount();
+  const { connectors, connectAsync, isPending: isConnecting } = useConnect();
   const { disconnect } = useDisconnect();
-  const { switchChain, isPending: isSwitching } = useSwitchChain();
+  const { switchChainAsync, isPending: isSwitching } = useSwitchChain();
   const { writeContractAsync } = useWriteContract();
 
   const [amountInput, setAmountInput] = useState("1");
@@ -99,7 +97,7 @@ function App() {
   const action = parsedAmount
     ? getTipAction({
         account: address,
-        chainId,
+        chainId: walletChainId,
         tipJarAddress,
         amount: parsedAmount,
         allowance,
@@ -117,7 +115,7 @@ function App() {
     try {
       if (!address) {
         if (firstConnector) {
-          connect({ connector: firstConnector });
+          await connectAsync({ connector: firstConnector, chainId: arcTestnet.id });
         } else {
           setPhase("error");
           setStatus("No injected wallet detected. Install or unlock a browser wallet.");
@@ -125,8 +123,8 @@ function App() {
         return;
       }
 
-      if (chainId !== arcTestnet.id) {
-        switchChain({ chainId: arcTestnet.id });
+      if (walletChainId !== arcTestnet.id) {
+        await switchChainAsync({ chainId: arcTestnet.id });
         return;
       }
 
@@ -143,6 +141,7 @@ function App() {
           address: USDC_ADDRESS,
           abi: usdcAbi,
           functionName: "approve",
+          chainId: arcTestnet.id,
           args: [tipJarAddress, parsedAmount],
         });
         setLastHash(approvalHash);
@@ -157,6 +156,7 @@ function App() {
         address: tipJarAddress,
         abi: tipJarAbi,
         functionName: "tip",
+        chainId: arcTestnet.id,
         args: [parsedAmount, message],
       });
       setLastHash(tipHash);
@@ -329,7 +329,7 @@ function getButtonLabel(action: string | undefined, phase: SubmitPhase) {
   if (phase === "approving") return "Approving USDC";
   if (phase === "tipping") return "Sending tip";
   if (action === "connect") return "Connect wallet";
-  if (action === "switch") return "Switch to Arc";
+  if (action === "switch") return "Switch to Arc Testnet";
   if (action === "configure") return "Configure TipJar";
   if (action === "approve") return "Approve and tip";
   return "Send tip";
