@@ -42,7 +42,7 @@ function App() {
   const [amountInput, setAmountInput] = useState("1");
   const [message, setMessage] = useState("");
   const [phase, setPhase] = useState<SubmitPhase>("idle");
-  const [status, setStatus] = useState("Ready to send a tip.");
+  const [status, setStatus] = useState("");
   const [lastHash, setLastHash] = useState<`0x${string}` | undefined>();
 
   const parsedAmount = useMemo(() => {
@@ -107,6 +107,7 @@ function App() {
     : undefined;
   const isBusy = phase === "approving" || phase === "tipping";
   const canSubmit = Boolean(parsedAmount) && messageBytes <= 280 && !isBusy;
+  const showStatus = phase !== "idle" || Boolean(lastHash);
 
   async function handlePrimaryAction() {
     if (!parsedAmount || messageBytes > 280) {
@@ -199,8 +200,7 @@ function App() {
 
       <section className="page-hero" aria-labelledby="page-title">
         <div className="hero-copy">
-          <p>TipJar on Arc</p>
-          <h1 id="page-title">Send a tip to starlash7</h1>
+          <h1 id="page-title">TipJar on Arc</h1>
         </div>
         <div className="hero-total" aria-label="Total donations">
           <span>Total received</span>
@@ -221,8 +221,7 @@ function App() {
           <div className="section-heading">
             <img className="heart-asset" src={heartAsset} alt="" aria-hidden="true" />
             <div>
-              <p>Send</p>
-              <h2>Send a tip</h2>
+              <h2>Send USDC</h2>
             </div>
           </div>
 
@@ -270,17 +269,19 @@ function App() {
             {getButtonLabel(action, phase)}
           </button>
 
-          <div className={`status-line ${phase}`}>
-            <span>{status}</span>
-            {lastHash ? (
-              <a href={`${ARC_EXPLORER_URL}/tx/${lastHash}`} target="_blank" rel="noreferrer">
-                Arcscan <ExternalLink aria-hidden="true" />
-              </a>
-            ) : null}
-          </div>
+          {showStatus ? (
+            <div className={`status-line ${phase}`}>
+              <span>{status}</span>
+              {lastHash ? (
+                <a href={`${ARC_EXPLORER_URL}/tx/${lastHash}`} target="_blank" rel="noreferrer">
+                  Arcscan <ExternalLink aria-hidden="true" />
+                </a>
+              ) : null}
+            </div>
+          ) : null}
 
           <a className="faucet-link" href={CIRCLE_FAUCET_URL} target="_blank" rel="noreferrer">
-            Need test USDC? Open Circle Faucet
+            Circle Faucet
             <ExternalLink aria-hidden="true" />
           </a>
         </form>
@@ -288,7 +289,6 @@ function App() {
         <section className="history-panel" aria-label="Recent donations">
           <div className="history-header">
             <div>
-              <p>History</p>
               <h2>Recent donations</h2>
             </div>
             <button
