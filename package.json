@@ -1,0 +1,46 @@
+{
+  "name": "tip-on-arc",
+  "version": "0.1.0",
+  "description": "Open-source USDC TipJar template for Arc Testnet.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/starlash7/Tip-on-Arc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/starlash7/Tip-on-Arc/issues"
+  },
+  "homepage": "https://github.com/starlash7/Tip-on-Arc#readme",
+  "scripts": {
+    "dev": "npm run sync:abi && vite --host 0.0.0.0",
+    "build": "npm run sync:abi && tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "npm run test:contracts && npm run test:web",
+    "test:contracts": "forge test",
+    "test:web": "vitest run",
+    "compile": "forge build",
+    "sync:abi": "forge build && node scripts/sync-abi.mjs",
+    "deploy:arc": "forge script script/DeployTipJar.s.sol:DeployTipJar --rpc-url $ARC_TESTNET_RPC_URL --private-key $PRIVATE_KEY --broadcast"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.12",
+    "lucide-react": "^0.555.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "viem": "^2.41.2",
+    "wagmi": "^3.1.1"
+  },
+  "overrides": {
+    "ws": "8.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.2",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0",
+    "vitest": "^4.0.16"
+  }
+}
