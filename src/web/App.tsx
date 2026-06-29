@@ -263,7 +263,10 @@ function App() {
         </button>
 
         <a className="faucet-link" href={CIRCLE_FAUCET_URL} target="_blank" rel="noreferrer">
-          Circle Faucet
+          <span>
+            <strong>Arc Testnet Faucet</strong>
+            <small>Circle · USDC</small>
+          </span>
           <ExternalLink aria-hidden="true" />
         </a>
 

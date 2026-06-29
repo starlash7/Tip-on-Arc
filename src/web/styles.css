@@ -1,6 +1,6 @@
 :root {
   color: #191f28;
-  background: #ffffff;
+  background: #f2f4f6;
   font-family:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
@@ -16,7 +16,7 @@ body {
   min-width: 320px;
   min-height: 100dvh;
   margin: 0;
-  background: #ffffff;
+  background: #f2f4f6;
 }
 
 button,
@@ -47,8 +47,8 @@ p {
   width: min(430px, 100%);
   min-height: 100dvh;
   margin: 0 auto;
-  padding: 18px 20px 88px;
-  background: #ffffff;
+  padding: 0 0 88px;
+  background: #f2f4f6;
 }
 
 .app-header {
@@ -56,6 +56,8 @@ p {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  padding: 18px 20px 0;
+  background: #ffffff;
 }
 
 .profile-link {
@@ -136,7 +138,9 @@ p {
 }
 
 .top-section {
-  padding: 40px 0 18px;
+  margin-bottom: 12px;
+  padding: 40px 20px 22px;
+  background: #ffffff;
 }
 
 .hero-heart {
@@ -183,10 +187,15 @@ p {
 
 .send-section,
 .history-section {
-  border-top: 10px solid #f2f4f6;
-  margin: 0 -20px;
-  padding: 24px 20px 0;
+  margin-bottom: 12px;
+  padding: 24px 20px;
+  background: #ffffff;
   overflow: hidden;
+}
+
+.history-section {
+  margin-bottom: 0;
+  padding-bottom: 36px;
 }
 
 .section-title,
@@ -323,10 +332,28 @@ textarea::placeholder,
 }
 
 .faucet-link {
-  min-height: 48px;
-  margin-top: 10px;
+  min-height: 62px;
+  margin-top: 12px;
+  justify-content: space-between;
   background: #eef6ff;
   color: #0064ff;
+  text-align: left;
+}
+
+.faucet-link span {
+  display: grid;
+  gap: 3px;
+}
+
+.faucet-link strong {
+  color: #0064ff;
+  font-size: 0.98rem;
+}
+
+.faucet-link small {
+  color: #6b7684;
+  font-size: 0.82rem;
+  font-weight: 740;
 }
 
 .primary-button svg,
@@ -473,20 +500,17 @@ textarea::placeholder,
 
 @media (min-width: 720px) {
   .app-shell {
-    padding-top: 24px;
+    min-height: auto;
+    margin-top: 28px;
+    margin-bottom: 28px;
   }
 }
 
 @media (max-width: 390px) {
-  .app-shell {
-    padding-right: 16px;
-    padding-left: 16px;
-  }
-
+  .app-header,
+  .top-section,
   .send-section,
   .history-section {
-    margin-right: -16px;
-    margin-left: -16px;
     padding-right: 16px;
     padding-left: 16px;
   }
