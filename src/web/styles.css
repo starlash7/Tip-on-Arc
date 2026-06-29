@@ -1,6 +1,6 @@
 :root {
   color: #191f28;
-  background: #f4f6fb;
+  background: #f5f7fb;
   font-family:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
@@ -43,39 +43,30 @@ p {
 }
 
 .app-shell {
-  width: min(960px, calc(100% - 32px));
+  width: min(980px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 28px 0 44px;
+  padding: 26px 0 48px;
 }
 
-.hero-card,
-.send-panel,
-.history-panel {
-  border: 1px solid #e5e8ef;
-  border-radius: 8px;
-  background: #ffffff;
-}
-
-.hero-card {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+.site-header {
+  display: flex;
   align-items: center;
-  gap: 22px;
-  padding: 22px;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .profile-link {
   display: inline-flex;
   align-items: center;
-  gap: 13px;
+  gap: 12px;
   min-width: 0;
   color: #191f28;
   text-decoration: none;
 }
 
 .profile-link img {
-  width: 64px;
-  height: 64px;
+  width: 52px;
+  height: 52px;
   flex: 0 0 auto;
   border-radius: 50%;
   background: #eef3ff;
@@ -105,27 +96,6 @@ p {
   height: 16px;
 }
 
-.hero-copy {
-  min-width: 0;
-}
-
-.hero-copy p,
-.section-heading p,
-.history-header p {
-  margin-bottom: 6px;
-  color: #6b7684;
-  font-size: 0.88rem;
-  font-weight: 700;
-}
-
-.hero-copy h1 {
-  margin-bottom: 0;
-  color: #191f28;
-  font-size: 2.45rem;
-  line-height: 1.05;
-  letter-spacing: 0;
-}
-
 .wallet-strip {
   display: flex;
   align-items: center;
@@ -140,7 +110,7 @@ p {
   align-items: center;
   border-radius: 999px;
   padding: 0 12px;
-  background: #f2f4f6;
+  background: #eef1f5;
   color: #6b7684;
   font-size: 0.88rem;
   font-weight: 700;
@@ -148,7 +118,7 @@ p {
 }
 
 .wallet-pill.ready {
-  background: #eef6ff;
+  background: #e8f3ff;
   color: #0064ff;
 }
 
@@ -161,40 +131,93 @@ p {
   font-weight: 700;
 }
 
+.page-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 24px;
+  padding: 42px 0 30px;
+}
+
+.hero-copy p,
+.section-heading p,
+.history-header p {
+  margin-bottom: 8px;
+  color: #6b7684;
+  font-size: 0.88rem;
+  font-weight: 760;
+}
+
+.hero-copy h1 {
+  max-width: 680px;
+  margin-bottom: 0;
+  color: #191f28;
+  font-size: clamp(2.7rem, 6.2vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.hero-total {
+  min-width: 180px;
+  border-radius: 8px;
+  padding: 18px 20px;
+  background: #ffffff;
+}
+
+.hero-total span {
+  display: block;
+  margin-bottom: 6px;
+  color: #8b95a1;
+  font-size: 0.85rem;
+  font-weight: 760;
+}
+
+.hero-total strong {
+  color: #0064ff;
+  font-size: 1.35rem;
+  line-height: 1.1;
+}
+
+.section-divider {
+  height: 1px;
+  background: #e5e8ef;
+}
+
 .content-grid {
   display: grid;
-  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
-  gap: 16px;
+  grid-template-columns: minmax(320px, 0.92fr) minmax(0, 1.08fr);
+  gap: 18px;
   align-items: start;
-  margin-top: 16px;
+  padding-top: 22px;
 }
 
 .send-panel,
 .history-panel {
+  border: 1px solid #e5e8ef;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.send-panel {
   padding: 24px;
+}
+
+.history-panel {
+  padding: 22px;
 }
 
 .section-heading {
   display: flex;
   align-items: center;
-  gap: 13px;
-  margin-bottom: 22px;
+  gap: 14px;
+  margin-bottom: 24px;
 }
 
-.icon-chip {
-  display: inline-flex;
-  width: 44px;
-  height: 44px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background: #eef6ff;
-  color: #0064ff;
-}
-
-.icon-chip svg {
-  width: 22px;
-  height: 22px;
+.heart-asset {
+  width: 46px;
+  height: auto;
+  flex: 0 0 auto;
+  display: block;
 }
 
 .section-heading h2,
@@ -215,7 +238,7 @@ p {
 .field span {
   color: #4e5968;
   font-size: 0.92rem;
-  font-weight: 750;
+  font-weight: 760;
 }
 
 .amount-field {
@@ -225,7 +248,7 @@ p {
   min-height: 60px;
   border: 1px solid #e5e8ef;
   border-radius: 8px;
-  background: #f9fafc;
+  background: #f8fafc;
 }
 
 .amount-field input {
@@ -237,14 +260,14 @@ p {
   background: transparent;
   color: #191f28;
   font-size: 1.9rem;
-  font-weight: 800;
+  font-weight: 820;
 }
 
 .amount-field strong {
   padding: 0 16px;
   color: #0064ff;
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 820;
 }
 
 textarea {
@@ -256,7 +279,7 @@ textarea {
   outline: none;
   padding: 14px 16px;
   color: #191f28;
-  background: #f9fafc;
+  background: #f8fafc;
   line-height: 1.5;
 }
 
@@ -295,7 +318,7 @@ textarea:focus,
   padding: 0 16px;
   background: #0064ff;
   color: #ffffff;
-  font-weight: 800;
+  font-weight: 820;
 }
 
 .primary-button:disabled {
@@ -319,7 +342,7 @@ textarea:focus,
   border-radius: 8px;
   padding: 10px 12px;
   color: #6b7684;
-  background: #f9fafc;
+  background: #f8fafc;
   font-size: 0.88rem;
 }
 
@@ -339,7 +362,7 @@ textarea:focus,
   align-items: center;
   gap: 5px;
   color: #0064ff;
-  font-weight: 800;
+  font-weight: 820;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -450,7 +473,7 @@ textarea:focus,
   border-radius: 8px;
   padding: 34px 18px;
   color: #6b7684;
-  background: #f9fafc;
+  background: #f8fafc;
   text-align: center;
 }
 
@@ -466,16 +489,28 @@ textarea:focus,
 
 @media (max-width: 800px) {
   .app-shell {
-    width: min(100% - 24px, 960px);
-    padding-top: 16px;
+    width: min(100% - 24px, 980px);
+    padding-top: 18px;
   }
 
-  .hero-card,
+  .site-header,
+  .page-hero,
   .content-grid {
     grid-template-columns: 1fr;
   }
 
-  .hero-card,
+  .site-header {
+    display: grid;
+  }
+
+  .page-hero {
+    padding: 34px 0 24px;
+  }
+
+  .hero-total {
+    min-width: 0;
+  }
+
   .send-panel,
   .history-panel {
     padding: 18px;
@@ -486,7 +521,7 @@ textarea:focus,
   }
 
   .hero-copy h1 {
-    font-size: 2rem;
+    font-size: 2.6rem;
   }
 }
 

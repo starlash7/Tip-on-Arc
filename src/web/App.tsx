@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import {
   ExternalLink,
   Github,
-  Heart,
   Loader2,
   RefreshCcw,
   Send,
@@ -24,6 +23,7 @@ import { arcTestnet } from "viem/chains";
 import { tipJarAbi, type TipRecord, usdcAbi } from "./contracts";
 import { ARC_EXPLORER_URL, tipJarAddress, USDC_ADDRESS, wagmiConfig } from "./config";
 import { getTipAction, parseTipAmount } from "./lib/tip";
+import heartAsset from "./assets/heart.png";
 
 type SubmitPhase = "idle" | "approving" | "tipping" | "success" | "error";
 
@@ -174,7 +174,7 @@ function App() {
 
   return (
     <main className="app-shell">
-      <section className="hero-card" aria-label="Profile">
+      <header className="site-header">
         <a className="profile-link" href={GITHUB_URL} target="_blank" rel="noreferrer">
           <img src={GITHUB_AVATAR_URL} alt="starlash7 GitHub profile" />
           <div>
@@ -185,10 +185,6 @@ function App() {
             </span>
           </div>
         </a>
-        <div className="hero-copy">
-          <p>TipJar on Arc</p>
-          <h1>Send a tip</h1>
-        </div>
         <div className="wallet-strip">
           <span className={address ? "wallet-pill ready" : "wallet-pill"}>
             {address ? compactAddress(address) : "Wallet disconnected"}
@@ -199,7 +195,20 @@ function App() {
             </button>
           ) : null}
         </div>
+      </header>
+
+      <section className="page-hero" aria-labelledby="page-title">
+        <div className="hero-copy">
+          <p>TipJar on Arc</p>
+          <h1 id="page-title">Send a tip to starlash7</h1>
+        </div>
+        <div className="hero-total" aria-label="Total donations">
+          <span>Total received</span>
+          <strong>{formatUsdc(totalTipped)} USDC</strong>
+        </div>
       </section>
+
+      <div className="section-divider" aria-hidden="true" />
 
       <section className="content-grid">
         <form
@@ -210,11 +219,9 @@ function App() {
           }}
         >
           <div className="section-heading">
-            <div className="icon-chip">
-              <Heart aria-hidden="true" />
-            </div>
+            <img className="heart-asset" src={heartAsset} alt="" aria-hidden="true" />
             <div>
-              <p>Support with test USDC</p>
+              <p>Send</p>
               <h2>Send a tip</h2>
             </div>
           </div>
@@ -281,8 +288,8 @@ function App() {
         <section className="history-panel" aria-label="Recent donations">
           <div className="history-header">
             <div>
-              <p>Recent donations</p>
-              <h2>{formatUsdc(totalTipped)} USDC</h2>
+              <p>History</p>
+              <h2>Recent donations</h2>
             </div>
             <button
               className="icon-button"
