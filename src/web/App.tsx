@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import {
-  CheckCircle2,
-  CircleDollarSign,
   ExternalLink,
+  Github,
+  Heart,
   Loader2,
   RefreshCcw,
   Send,
@@ -27,6 +27,10 @@ import { getTipAction, parseTipAmount } from "./lib/tip";
 
 type SubmitPhase = "idle" | "approving" | "tipping" | "success" | "error";
 
+const GITHUB_URL = "https://github.com/starlash7";
+const GITHUB_AVATAR_URL = "https://github.com/starlash7.png?size=192";
+const CIRCLE_FAUCET_URL = "https://faucet.circle.com/";
+
 function App() {
   const { address } = useAccount();
   const chainId = useChainId();
@@ -38,7 +42,7 @@ function App() {
   const [amountInput, setAmountInput] = useState("1");
   const [message, setMessage] = useState("");
   const [phase, setPhase] = useState<SubmitPhase>("idle");
-  const [status, setStatus] = useState("Ready for Arc Testnet USDC tips.");
+  const [status, setStatus] = useState("Ready to send a tip.");
   const [lastHash, setLastHash] = useState<`0x${string}` | undefined>();
 
   const parsedAmount = useMemo(() => {
@@ -89,6 +93,7 @@ function App() {
   const allowance = (allowanceQuery.data as bigint | undefined) ?? 0n;
   const totalTipped = (totalQuery.data as bigint | undefined) ?? 0n;
   const tips = ((tipsQuery.data as TipRecord[] | undefined) ?? []).slice().reverse();
+  const visibleTips = tips.slice(0, 8);
   const messageBytes = new TextEncoder().encode(message).length;
   const firstConnector = connectors[0];
   const action = parsedAmount
@@ -158,7 +163,7 @@ function App() {
       await waitForTransactionReceipt(wagmiConfig, { hash: tipHash });
       await Promise.all([totalQuery.refetch(), tipsQuery.refetch(), allowanceQuery.refetch()]);
       setPhase("success");
-      setStatus("Tip recorded on Arc Testnet.");
+      setStatus("Tip sent.");
       setAmountInput("1");
       setMessage("");
     } catch (error) {
@@ -169,30 +174,48 @@ function App() {
 
   return (
     <main className="app-shell">
-      <section className="topbar" aria-label="Wallet status">
-        <div>
-          <p className="eyebrow">Arc Testnet · USDC tips</p>
-          <h1>TipJar on Arc</h1>
+      <section className="hero-card" aria-label="Profile">
+        <a className="profile-link" href={GITHUB_URL} target="_blank" rel="noreferrer">
+          <img src={GITHUB_AVATAR_URL} alt="starlash7 GitHub profile" />
+          <div>
+            <strong>starlash7</strong>
+            <span>
+              <Github aria-hidden="true" />
+              GitHub
+            </span>
+          </div>
+        </a>
+        <div className="hero-copy">
+          <p>TipJar on Arc</p>
+          <h1>Send a tip</h1>
         </div>
         <div className="wallet-strip">
-          <span className={address ? "network-pill ready" : "network-pill"}>
+          <span className={address ? "wallet-pill ready" : "wallet-pill"}>
             {address ? compactAddress(address) : "Wallet disconnected"}
           </span>
           {address ? (
-            <button className="ghost-button" type="button" onClick={() => disconnect()}>
+            <button className="text-button" type="button" onClick={() => disconnect()}>
               Disconnect
             </button>
           ) : null}
         </div>
       </section>
 
-      <section className="workspace-grid">
-        <div className="tip-panel">
-          <div className="panel-heading">
-            <CircleDollarSign aria-hidden="true" />
+      <section className="content-grid">
+        <form
+          className="send-panel"
+          onSubmit={(event) => {
+            event.preventDefault();
+            void handlePrimaryAction();
+          }}
+        >
+          <div className="section-heading">
+            <div className="icon-chip">
+              <Heart aria-hidden="true" />
+            </div>
             <div>
-              <p className="eyebrow">Send a tip</p>
-              <h2>USDC + onchain note</h2>
+              <p>Support with test USDC</p>
+              <h2>Send a tip</h2>
             </div>
           </div>
 
@@ -216,7 +239,7 @@ function App() {
               value={message}
               maxLength={280}
               onChange={(event) => setMessage(event.target.value)}
-              placeholder="Thanks for building on Arc."
+              placeholder="Write a short note."
             />
           </label>
           <div className={messageBytes > 280 ? "byte-count over" : "byte-count"}>
@@ -225,9 +248,8 @@ function App() {
 
           <button
             className="primary-button"
-            type="button"
+            type="submit"
             disabled={!canSubmit || isConnecting || isSwitching}
-            onClick={handlePrimaryAction}
           >
             {isBusy || isConnecting || isSwitching ? (
               <Loader2 className="spin" aria-hidden="true" />
@@ -236,7 +258,7 @@ function App() {
             ) : action === "tip" ? (
               <Send aria-hidden="true" />
             ) : (
-              <CheckCircle2 aria-hidden="true" />
+              <Send aria-hidden="true" />
             )}
             {getButtonLabel(action, phase)}
           </button>
@@ -249,47 +271,44 @@ function App() {
               </a>
             ) : null}
           </div>
-        </div>
 
-        <aside className="summary-panel" aria-label="TipJar summary">
-          <div className="stat-row">
-            <span>Total tipped</span>
-            <strong>{formatUsdc(totalTipped)} USDC</strong>
-          </div>
-          <div className="stat-row">
-            <span>Network</span>
-            <strong>{chainId === arcTestnet.id ? "Arc Testnet" : "Switch needed"}</strong>
-          </div>
-          <div className="stat-row">
-            <span>TipJar</span>
-            <strong>{tipJarAddress ? compactAddress(tipJarAddress) : "Not configured"}</strong>
-          </div>
-          <button
-            className="ghost-button refresh-button"
-            type="button"
-            onClick={() => void Promise.all([totalQuery.refetch(), tipsQuery.refetch()])}
-          >
-            <RefreshCcw aria-hidden="true" />
-            Refresh
-          </button>
-        </aside>
+          <a className="faucet-link" href={CIRCLE_FAUCET_URL} target="_blank" rel="noreferrer">
+            Need test USDC? Open Circle Faucet
+            <ExternalLink aria-hidden="true" />
+          </a>
+        </form>
 
-        <section className="tips-panel" aria-label="Recent tips">
-          <div className="section-title">
-            <p className="eyebrow">Onchain records</p>
-            <h2>Recent tips</h2>
+        <section className="history-panel" aria-label="Recent donations">
+          <div className="history-header">
+            <div>
+              <p>Recent donations</p>
+              <h2>{formatUsdc(totalTipped)} USDC</h2>
+            </div>
+            <button
+              className="icon-button"
+              type="button"
+              aria-label="Refresh recent donations"
+              onClick={() => void Promise.all([totalQuery.refetch(), tipsQuery.refetch()])}
+            >
+              <RefreshCcw aria-hidden="true" />
+            </button>
           </div>
-          {tips.length ? (
-            <div className="tip-list">
-              {tips.slice(0, 8).map((tip, index) => (
-                <article className="tip-item" key={`${tip.sender}-${tip.timestamp}-${index}`}>
-                  <div>
-                    <strong>{formatUsdc(tip.amount)} USDC</strong>
-                    <p>{tip.message || "No message"}</p>
+
+          {visibleTips.length ? (
+            <div className="donation-list">
+              {visibleTips.map((tip, index) => (
+                <article className="donation-item" key={`${tip.sender}-${tip.timestamp}-${index}`}>
+                  <div className="donor-avatar" aria-hidden="true">
+                    {compactAddress(tip.sender).slice(2, 4).toUpperCase()}
                   </div>
-                  <span>
-                    {compactAddress(tip.sender)} · {formatTimestamp(tip.timestamp)}
-                  </span>
+                  <div className="donation-body">
+                    <div className="donation-row">
+                      <strong>{compactAddress(tip.sender)}</strong>
+                      <span>{formatUsdc(tip.amount)} USDC</span>
+                    </div>
+                    <p>{tip.message || "Sent a tip."}</p>
+                    <time>{formatTimestamp(tip.timestamp)}</time>
+                  </div>
                 </article>
               ))}
             </div>
