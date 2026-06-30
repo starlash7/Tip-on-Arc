@@ -1,16 +1,27 @@
-# TipJar on Arc
+# Tip on Arc
 
-Open-source USDC TipJar template for Arc Testnet. Anyone can send a USDC tip with
-an optional onchain message; the contract stores every tip record and lets the
-owner withdraw collected USDC.
+Open-source USDC tip app on Arc Testnet. Anyone can connect a wallet, switch to
+Arc Testnet, approve USDC, and send a tip with an optional onchain message.
+
+Live app: https://starlash7.github.io/Tip-on-Arc/
+
+![Tip on Arc app screenshot](docs/screenshot.png)
 
 ## What It Includes
 
-- Solidity `TipJar` contract that accepts Arc USDC through the ERC-20 interface.
+- Solidity `TipJar` contract for USDC tips and onchain messages.
 - Foundry tests and Arc Testnet deployment script.
-- Vite React app for wallet connect, USDC approval, tipping, total raised, and
-  recent tip records.
-- ABI sync script so the frontend uses the compiled Foundry artifact.
+- Vite React app with wallet connect, Arc Testnet switching, approve, tip,
+  total received, Circle Faucet link, and recent donations.
+- ABI sync script from Foundry artifacts to the frontend.
+
+## Current Deployment
+
+| Item | Value |
+| --- | --- |
+| TipJar | `0x8F3301dC24E07F2DF1b9F046C3cCBaadFb4B6E09` |
+| Owner | `0x958E30A1ca10818684FAE309136E702751CcC58e` |
+| App | `https://starlash7.github.io/Tip-on-Arc/` |
 
 ## Arc Testnet Values
 
@@ -20,34 +31,21 @@ owner withdraw collected USDC.
 | RPC | `https://rpc.testnet.arc.network` |
 | Explorer | `https://testnet.arcscan.app` |
 | USDC ERC-20 interface | `0x3600000000000000000000000000000000000000` |
+| Circle Faucet | `https://faucet.circle.com/` |
 
-Arc uses USDC as the native gas token. For `approve`, `transferFrom`,
-`balanceOf`, and frontend amount parsing, this project uses the Arc USDC ERC-20
-interface with 6 decimals.
+Arc uses USDC as the native gas token. The contract and frontend use the Arc
+USDC ERC-20 interface with 6 decimals for `approve`, `transferFrom`, and amount
+formatting.
 
 ## Quick Start
 
-Install dependencies:
-
 ```sh
 npm install
-```
-
-Run contract and frontend checks:
-
-```sh
-npm test
-npm run build
-```
-
-Start the local app:
-
-```sh
 cp .env.example .env
 npm run dev
 ```
 
-The app needs `VITE_TIPJAR_ADDRESS` after you deploy the contract.
+Set `VITE_TIPJAR_ADDRESS` in `.env` after deploying a contract.
 
 ## Deploy to Arc Testnet
 
@@ -58,8 +56,8 @@ curl -L https://foundry.paradigm.xyz | bash
 foundryup
 ```
 
-Create a deployment wallet, then fund it with Arc Testnet USDC from the Circle
-Faucet. USDC pays both gas and tips on Arc.
+Create and fund a deployment wallet with Arc Testnet USDC from the Circle
+Faucet:
 
 ```sh
 cast wallet new
@@ -79,22 +77,15 @@ Deploy:
 npm run deploy:arc
 ```
 
-Copy the deployed contract address into `.env`:
+Set the frontend contract address:
 
 ```sh
 VITE_TIPJAR_ADDRESS=0xYOUR_DEPLOYED_TIPJAR_ADDRESS
 ```
 
-Then run:
-
-```sh
-npm run dev
-```
-
 ## Withdraw Tips
 
-Only the deployment owner can withdraw. The command transfers the contract's
-entire USDC balance to the owner:
+Only the owner can withdraw the contract's USDC balance:
 
 ```sh
 cast send $VITE_TIPJAR_ADDRESS "withdraw()" \
@@ -104,24 +95,18 @@ cast send $VITE_TIPJAR_ADDRESS "withdraw()" \
 
 ## Frontend Deployment
 
-Build the static app:
+Build the static app with `VITE_TIPJAR_ADDRESS` set:
 
 ```sh
 npm run build
 ```
 
-Deploy the `dist/` directory to any static host. Set this environment variable
-in the host before building:
+Deploy the `dist/` directory to any static host. For GitHub Pages under this
+repo path, build with:
 
 ```sh
-VITE_TIPJAR_ADDRESS=0xYOUR_DEPLOYED_TIPJAR_ADDRESS
+VITE_BASE_PATH=/Tip-on-Arc/ npm run build
 ```
-
-Demo: `https://starlash7.github.io/Tip-on-Arc/`
-
-Screenshot:
-
-![TipJar app screenshot](docs/screenshot.png)
 
 ## Contract API
 
@@ -134,11 +119,11 @@ Screenshot:
 
 ## Safety Notes
 
-- This is a testnet template, not audited production code.
+- This is a testnet project, not audited production code.
 - Never commit a real private key or funded `.env` file.
 - Testnet USDC has no real-world value.
-- `getTips()` returns the full onchain array for v1 simplicity. For large public
-  deployments, index the `Tipped` event instead of relying on unbounded reads.
+- `getTips()` returns the full onchain array for v1 simplicity. For larger
+  deployments, index the `Tipped` event instead.
 
 ## License
 
