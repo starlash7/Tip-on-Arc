@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import {
   ExternalLink,
-  Github,
   Loader2,
   RefreshCcw,
   Send,
@@ -22,7 +21,6 @@ import { arcTestnet } from "viem/chains";
 import { tipJarAbi, type TipRecord, usdcAbi } from "./contracts";
 import { ARC_EXPLORER_URL, tipJarAddress, USDC_ADDRESS, wagmiConfig } from "./config";
 import { getTipAction, parseTipAmount } from "./lib/tip";
-import heartAsset from "./assets/heart.png";
 
 type SubmitPhase = "idle" | "approving" | "tipping" | "success" | "error";
 
@@ -177,13 +175,12 @@ function App() {
     <main className="app-shell">
       <header className="app-header">
         <a className="profile-link" href={GITHUB_URL} target="_blank" rel="noreferrer">
-          <img src={GITHUB_AVATAR_URL} alt="starlash7 GitHub profile" />
+          <span className="avatar-ring">
+            <img src={GITHUB_AVATAR_URL} alt="" />
+          </span>
           <div>
             <strong>starlash7</strong>
-            <span>
-              <Github aria-hidden="true" />
-              GitHub
-            </span>
+            <span>✨ GitHub profile</span>
           </div>
         </a>
         {address ? (
@@ -197,8 +194,7 @@ function App() {
       </header>
 
       <section className="top-section" aria-labelledby="page-title">
-        <img className="hero-heart" src={heartAsset} alt="" aria-hidden="true" />
-        <h1 id="page-title">TipJar on Arc</h1>
+        <h1 id="page-title">Tip on Arc</h1>
         <div className="total-row" aria-label="Total donations">
           <span>Total received</span>
           <strong>{formatUsdc(totalTipped)} USDC</strong>

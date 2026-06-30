@@ -64,15 +64,28 @@ p {
   display: inline-flex;
   min-width: 0;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
   color: #191f28;
   text-decoration: none;
 }
 
-.profile-link img {
-  width: 42px;
-  height: 42px;
+.avatar-ring {
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
   flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #ff3040 0%, #ffbf00 45%, #833ab4 100%) border-box;
+  border: 2px solid transparent;
+}
+
+.profile-link img {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #f2f4f6;
 }
@@ -87,14 +100,12 @@ p {
 .profile-link span {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
   margin-top: 3px;
   color: #8b95a1;
   font-size: 0.84rem;
   font-weight: 700;
 }
 
-.profile-link svg,
 .status-line svg,
 .faucet-link svg {
   width: 15px;
@@ -139,15 +150,8 @@ p {
 
 .top-section {
   margin-bottom: 12px;
-  padding: 40px 20px 22px;
+  padding: 34px 20px 22px;
   background: #ffffff;
-}
-
-.hero-heart {
-  display: block;
-  width: 52px;
-  height: auto;
-  margin-bottom: 16px;
 }
 
 .top-section h1 {
