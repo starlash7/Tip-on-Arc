@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import {
   ExternalLink,
+  Github,
   Loader2,
   RefreshCcw,
   Send,
@@ -173,24 +174,28 @@ function App() {
 
   return (
     <main className="app-shell">
-      <header className="app-header">
+      {address ? (
+        <div className="wallet-strip top-wallet">
+          <span className="wallet-pill ready">{compactAddress(address)}</span>
+          <button className="text-button" type="button" onClick={() => disconnect()}>
+            Disconnect
+          </button>
+        </div>
+      ) : null}
+
+      <header className={address ? "app-header has-wallet" : "app-header"}>
         <a className="profile-link" href={GITHUB_URL} target="_blank" rel="noreferrer">
           <span className="avatar-ring">
-            <img src={GITHUB_AVATAR_URL} alt="" />
+            <img src={GITHUB_AVATAR_URL} alt="starlash7 GitHub profile" />
           </span>
           <div>
             <strong>starlash7</strong>
-            <span>✨ GitHub profile</span>
+            <span className="profile-meta">
+              <Github aria-hidden="true" />
+              GitHub
+            </span>
           </div>
         </a>
-        {address ? (
-          <div className="wallet-strip">
-            <span className="wallet-pill ready">{compactAddress(address)}</span>
-            <button className="text-button" type="button" onClick={() => disconnect()}>
-              Disconnect
-            </button>
-          </div>
-        ) : null}
       </header>
 
       <section className="top-section" aria-labelledby="page-title">

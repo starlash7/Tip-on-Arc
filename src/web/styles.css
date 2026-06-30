@@ -44,6 +44,7 @@ p {
 }
 
 .app-shell {
+  position: relative;
   width: min(430px, 100%);
   min-height: 100dvh;
   margin: 0 auto;
@@ -54,25 +55,29 @@ p {
 .app-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 18px 20px 0;
+  justify-content: flex-start;
+  min-height: 86px;
+  padding: 20px 20px 0;
   background: #ffffff;
+}
+
+.app-header.has-wallet {
+  padding-right: 176px;
 }
 
 .profile-link {
   display: inline-flex;
   min-width: 0;
   align-items: center;
-  gap: 11px;
+  gap: 13px;
   color: #191f28;
   text-decoration: none;
 }
 
 .avatar-ring {
   display: inline-flex;
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -84,8 +89,8 @@ p {
 }
 
 .profile-link img {
-  width: 40px;
-  height: 40px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: #f2f4f6;
 }
@@ -93,19 +98,21 @@ p {
 .profile-link strong {
   display: block;
   color: #191f28;
-  font-size: 0.98rem;
+  font-size: 1.1rem;
   line-height: 1.2;
 }
 
-.profile-link span {
+.profile-meta {
   display: inline-flex;
   align-items: center;
+  gap: 4px;
   margin-top: 3px;
   color: #8b95a1;
-  font-size: 0.84rem;
+  font-size: 0.88rem;
   font-weight: 700;
 }
 
+.profile-link svg,
 .status-line svg,
 .faucet-link svg {
   width: 15px;
@@ -118,6 +125,13 @@ p {
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.top-wallet {
+  position: absolute;
+  top: 18px;
+  right: 14px;
+  z-index: 2;
 }
 
 .wallet-pill {
@@ -525,5 +539,9 @@ textarea::placeholder,
 
   .total-row strong {
     font-size: 1.05rem;
+  }
+
+  .top-wallet .text-button {
+    display: none;
   }
 }
